@@ -18,10 +18,10 @@ Guide
 =====
 1. Export from toodledo as XML
 2. Install python 3.7 and required modules:
-   - BeautifulSoup
-   - lxml
-   
-    On Windows, download from https://www.lfd.uci.edu/~gohlke/pythonlibs/#lxml and then use `pip install <path to whl file>`.
+   - BeautifulSoup: `pip install BeautifulSoup`
+   - lxml: `pip install lxml`
+     
+     On Windows, download from https://www.lfd.uci.edu/~gohlke/pythonlibs/#lxml and then use `pip install <path to whl file>`.
 3. Run toodledo_to_todoist.py <xml_filename>
 4. Create a project in Todoist
 5. From the project screen, click the gear in the top right corner
