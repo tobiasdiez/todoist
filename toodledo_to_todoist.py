@@ -95,12 +95,12 @@ class TextExport:
         
         self.outFile = codecs.open('__text_tasks.txt','w+','utf-8')
         
-        print 'all folders...'
+        print('all folders...')
         for folder in self.folders:
             self.outFile.write( folder.name + '\n' )
             
             indent = '   '
-            for (task_id, task) in folder.tasks.iteritems():
+            for (task_id, task) in folder.tasks.items():
                 
                 #if task.folderMismatch:
                 #    self.outFile.write( indent + ' '.join(('folder mismatch', task.id, task.title, '(', task.folder.name, ')', '\n')))
@@ -134,14 +134,14 @@ class TodoistExport:
             fileCount = 1
             
             # only print top level items. parented items will be nested
-            for task in folder.tasks.itervalues():
+            for task in folder.tasks.values():
                 if task.parent == None:
                     
                     nextCount = task.count()
                     if(nextCount + n > self.TASK_LIMIT):
                         # SPLIT THE FILE
                         n = 0
-                        print "Warning: splitting tasks %s" % (folder.name)
+                        print("Warning: splitting tasks %s" % (folder.name))
                         f.close
                         fileCount += 1
                         filename = '__%s__part_%d_[00000].txt' % (folder.name, fileCount)
@@ -152,7 +152,7 @@ class TodoistExport:
                     n += nextCount
             
             if self.count > self.TASK_LIMIT:
-                print "Error: project has more than %d items: %s (%d)" % (self.TASK_LIMIT, folder.name, self.count)
+                print("Error: project has more than %d items: %s (%d)" % (self.TASK_LIMIT, folder.name, self.count))
             
             f.close()
             f = None
@@ -213,12 +213,12 @@ class Toodledo:
 
         
     def parseXML(self,filename):
-        print 'opening file:', filename
-        f = open(filename,'r')
-        xml = file.read(f)
+        print('opening file:', filename)
+        f = open(filename,'r', encoding='UTF-8')
+        xml = f.read()
         
-        print  'cooking soup...'
-        soup = BeautifulSoup(xml)
+        print('cooking soup...')
+        soup = BeautifulSoup(xml, 'lxml')
         
         # HACK: test only the export test folder
         if FOLDER_FILTER != None:
@@ -232,7 +232,7 @@ class Toodledo:
             outf.write( soup.prettify() )
             outf.close()
 
-        print 'parsing...'
+        print('parsing...')
         for item in soup.find_all('item'):
 
             # get the folder name, or replace with NOFOLDER for
@@ -300,9 +300,9 @@ class Toodledo:
             self.tasks[task.id] = task
 
 if len(sys.argv) < 2:
-    print ''
-    print '    Usage: python toodledo_to_todoist.py <xml_filename>'
-    print ''
+    print('')
+    print('    Usage: python toodledo_to_todoist.py <xml_filename>')
+    print('')
     exit(1)
 
 filename = sys.argv[1]
@@ -312,11 +312,11 @@ toodledo = Toodledo()
 toodledo.parseXML(filename)
 
 # export to a text file
-print "exporting text..."
+print("exporting text...")
 textexport = TextExport(toodledo)
 textexport.export()
         
 # export for Todoist
-print "exporting todoist..."
+print("exporting todoist...")
 todoist = TodoistExport(toodledo)
 todoist.export()
